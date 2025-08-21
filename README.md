@@ -1,4 +1,4 @@
-# 📱 Petfy
+# 📱 Petfy 🐕
 Análise e Projeto de Sistemas | ***UNISC***
 
 ---
@@ -20,15 +20,18 @@ Análise e Projeto de Sistemas | ***UNISC***
   
 #### - Funcionais:
   
-  - Cadastro de usuários (clientes e *petshops*).
+  - Cadastro de usuários (clientes e funcionarios).
   - Cadastro de *pets*.
+  - Cadastro de *petshops*.
   - Listagem de serviços do *petshop*.
+  - Login tutor.
+  - Login funcionário.
   - Agendamento online com escolha de data/horário.
   - Confirmação/cancelamento de agendamentos.
   - Histórico de serviços realizados.
 #### - Não funcionais:
   - Interface simples e responsiva (acesso por computador e celular).
-  - Segurança dos dados (**LGPD**).
+  - Ambiente separado para tutor e funcionário.
   - Sistema leve, sem necessidade de instalar.
 
 </details>
@@ -44,7 +47,7 @@ Análise e Projeto de Sistemas | ***UNISC***
 - Levantamento de requisitos.
 - Protótipo das telas no Figma.
 - Desenvolvimento do frontend web.
-- Desenvolvimento do backend (lógica e banco).
+- Desenvolvimento do backend (lógica e banco de dados).
 - Testes e ajustes.
 - Entrega final.
 
@@ -66,7 +69,7 @@ Análise e Projeto de Sistemas | ***UNISC***
   
  - Gerenciamento: Trello.
  - Protótipo: Figma.
- - Frontend: React.
- - Backend: Node.js ou Python.
- - Banco de dados: MySQL ou PostgreSQL.
+ - Frontend: React ou Vue.
+ - Backend: Python.
+ - Banco de dados: PostgreSQL.
  - Controle de versão: GitHub.
