@@ -1,4 +1,4 @@
-# 📱 Petfy 🐕
+# 📱 Petzzy 🐕
 Análise e Projeto de Sistemas | ***UNISC***
 
 ---
@@ -6,7 +6,7 @@ Análise e Projeto de Sistemas | ***UNISC***
 <details>
 <summary><h2>Escopo</h2></summary>
 
-#### O Petfy é um aplicativo web que conecta tutores de animais a petshops, permitindo o agendamento online de serviços como banho, tosa e consultas veterinárias.
+#### O Petzzy é um aplicativo web que conecta tutores de animais a petshops, permitindo o agendamento online de serviços como banho, tosa e consultas veterinárias.
   - Território: Voltado inicialmente para petshops da região de [cidade/estado].
   - Comunidade/Público-alvo:
     - *Petshops* → gerenciar horários e clientes sem complicação.
