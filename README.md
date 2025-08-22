@@ -67,8 +67,8 @@ Análise e Projeto de Sistemas | ***UNISC***
 <details>
 <summary><h2>Ferramentas</h2></summary>
   
- - Gerenciamento: Trello.
- - Protótipo: Figma.
+ - Gerenciamento: [Trello]().
+ - Protótipo: [Figma](https://www.figma.com/design/GFWTqnbzgo7lCCRTo0o0Kp/Petzzy?node-id=0-1&t=XUU7XLvXbQvElOVw-1).
  - Frontend: React ou Vue.
  - Backend: Python.
  - Banco de dados: PostgreSQL.
