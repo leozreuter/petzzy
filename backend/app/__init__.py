@@ -1,12 +1,18 @@
-from flask import Flask
-import dotenv, os
+from flask import Flask, current_app
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+import os
 
-dotenv.load_dotenv("../.env")
+db = SQLAlchemy()
+migrate = Migrate(directory="app/infra/migrations")
+
 API_VERSION = os.environ.get("API_VERSION") or "v1"
 
 def create_app():
     app = Flask(__name__)
-    #app.config.from_object('config.Config')
+    app.config.from_object("config.Config")
+    db.init_app(app)
+    migrate.init_app(app, db)
 
     # Import blueprints
     from .pages.home.index import bp as home_bp
