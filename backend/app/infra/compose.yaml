@@ -3,6 +3,6 @@ services:
     container_name: "postgres-dev"
     image: "postgres:17.6-alpine3.22"
     env_file:
-      - ../.env.development
+      - ../../.env.development
     ports:
       - "1234:5432"
