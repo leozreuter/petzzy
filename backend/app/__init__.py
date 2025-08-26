@@ -16,8 +16,10 @@ def create_app():
 
     # Import blueprints
     from .pages.home.index import bp as home_bp
+    from .pages.user.index import bp as user_bp
 
     # Register blueprint
     app.register_blueprint(home_bp, url_prefix=f'/api/{API_VERSION}/home')
+    app.register_blueprint(user_bp, url_prefix=f'/api/{API_VERSION}/user')
 
     return app
