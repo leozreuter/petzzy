@@ -1,9 +1,11 @@
 from .. import db
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy import Column, String, ForeignKey
-from sqlalchemy.orm import relationship
 import uuid
+from sqlalchemy.orm import relationship
+
 from datetime import datetime
+
+from app.infra.erros import NotFoundError
 
 # Columns types 
 # https://docs.sqlalchemy.org/en/20/core/types.html
@@ -17,3 +19,28 @@ class Perfil(db.Model):
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
     
     usuarios = relationship("Usuario", back_populates="perfil_fk")
+
+    @staticmethod
+    def criar(props):
+
+        desc = props.get("desc")
+
+        perfil = Perfil(
+            desc=desc
+        )
+        db.session.add(perfil)
+        db.session.commit()
+        return perfil
+
+    def retornaDicionario(self):
+        return {
+            "id": str(self.id),
+            "email": self.desc,
+            "dthr_ins": self.dthr_ins
+        }
+
+    def procuraPeloID(id):
+        result = Perfil.query.filter_by(id=id).first()
+        if not result:
+            raise NotFoundError(message="O id do perfil informado não foi encontrado",
+                                  action="Verifique se o perfil existe.")

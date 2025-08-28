@@ -1,10 +1,11 @@
 from .. import db
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 import uuid
 from datetime import datetime
 
+
+from app.infra.erros import NotFoundError
 # Columns types 
 # https://docs.sqlalchemy.org/en/20/core/types.html
 
@@ -28,3 +29,9 @@ class Clinica(db.Model):
     usuarios = relationship("Usuario", back_populates="clinica_fk")
     agendas = relationship("Agenda", back_populates="clinica_fk")
     atendimentos = relationship("Atendimento", back_populates="clinica_fk")
+
+    def procuraPeloID(id):
+        result = Clinica.query.filter_by(id=id).first()
+        if not result:
+            raise NotFoundError(message="O id da clinica informada não foi encontrado",
+                                  action="Verifique se a clinica informada existe.") 
