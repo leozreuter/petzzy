@@ -14,9 +14,9 @@ export default function Logo({
   const sizeSuffix = sizeMap[size] || sizeMap["xlarge"];
 
   const src_defined =
-    type === "only"
-      ? `/logo_only_${sizeSuffix}.png`
-      : `/logo_${sizeSuffix}.png`;
+    type === "text"
+      ? `/logo_${sizeSuffix}.png`
+      : `/logo_${type}_${sizeSuffix}.png`;
   return (
     <img className={`img ${variant}`} src={src_defined} alt="Petzzy Logo" />
   );
