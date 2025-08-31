@@ -7,6 +7,7 @@ export default function AppRoutes() {
       <Route path="/" element={<Pages.Home />} />
       <Route path="/user" element={<Pages.User />} />
       <Route path="/login" element={<Pages.Login />} />
+      <Route path="/cadastro" element={<Pages.Cadastro />} />
 
       <Route path="*" element={<h2>Página não encontrada</h2>} />
     </Routes>
