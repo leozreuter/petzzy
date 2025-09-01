@@ -1,11 +1,15 @@
 from .. import db
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from app.infra.erros import ValidationError
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
+
 from datetime import datetime
 import bcrypt
+
+from app.infra.erros import ValidationError
+from .perfis import Perfil
+from .clinicas import Clinica
 
 # Columns types 
 # https://docs.sqlalchemy.org/en/20/core/types.html
@@ -34,13 +38,19 @@ class Usuario(db.Model):
     vacinas = relationship("Vacina", back_populates="veterinario_fk")
     
     @staticmethod
-    def create(props):
+    def criar(props):
         email=props.get("email").lower()
-        Usuario.validadeEmail(email)
-
         nome=props.get("nome")
         senha=props.get("senha").encode('utf-8')
-        idperfil=props.get("idperfil")
+        id_perfil=props.get("id_perfil")
+        telefone=props.get("telefone")
+        crmv=props.get("crmv")
+        id_clinica=props.get("id_clinica")
+
+        Usuario.validaEmail(email)
+        Perfil.procuraPeloID(id_perfil)
+        if id_clinica:
+            Clinica.procuraPeloID(id_clinica)
 
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(senha, salt)
@@ -48,9 +58,12 @@ class Usuario(db.Model):
         usuario = Usuario(
             email=email,
             nome=nome,
-            idperfil=idperfil,
+            id_perfil=id_perfil,
             senha=hashed_password.decode('utf-8'),
-            salt=salt.decode('utf-8')
+            salt=salt.decode('utf-8'),
+            telefone=telefone,
+            id_clinica=id_clinica,
+            crmv=crmv
         )
         db.session.add(usuario)
         db.session.commit()
@@ -61,15 +74,27 @@ class Usuario(db.Model):
             "id": str(self.id),
             "email": self.email,
             "nome": self.nome,
-            "idperfil": self.idperfil,
+            "id_perfil": self.id_perfil,
             "senha": self.senha,
-            "dthr_ins": self.dthr_ins
+            "telefone": self.telefone,
+            "id_clinica": self.id_clinica,
+            "crmv": self.crmv,
+            "dthr_ins": self.dthr_ins,
+            "status": self.status
         }
     
     @staticmethod
-    def validadeEmail(email):
-        
+    def validaEmail(email):
         result = Usuario.query.filter_by(email=email).first()
         if result:
             raise ValidationError(message="O email informado já está em uso",
                                   action="Utilize outro email para realizar o cadastro.")
+
+
+    @staticmethod
+    def listaUsuarios():
+        usuarios = Usuario.query.all()
+        lista_usuarios=[]
+        for user in usuarios:
+            lista_usuarios.append(user.retornaDicionario())
+        return lista_usuarios
