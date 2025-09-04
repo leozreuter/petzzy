@@ -13,29 +13,36 @@ export default function Cadastro() {
   const [form, setForm] = useState({
     nome: "",
     email: "",
-    password: "",
-    confirmPassword: "",
+    senha: "",
+    confirmaSenha: "",
   });
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login com:", form);
-    try {
-      await fakeApiLogin();
-      toast.success("Cadastro realizado com sucesso!");
+
+    const response = await ApiCadastro(form);
+
+    const responseBody = await response.json();
+    if (response.status === 201) {
+      toast.success("Criado usuário!");
+      setError(null);
+
       setTimeout(() => {
         navigate("/login", {});
       }, 1000);
-    } catch {
+    } else if (response.status >= 400 && response.status < 500) {
       setError("Verifique as credenciais digitadas!");
+      toast.error("Usuário ou senha inválidos!");
       setForm({
         nome: form.nome,
         email: form.email,
-        confirmPassword: "",
-        password: "",
+        confirmaSenha: "",
+        senha: "",
       });
-      toast.error("Informações inválidas!");
+    } else {
+      setError("Server Error!");
+      toast.error(responseBody.action);
     }
   };
 
@@ -43,12 +50,14 @@ export default function Cadastro() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  function fakeApiLogin() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        Math.random() > 0.5 ? resolve() : reject();
-      }, 1000);
+  async function ApiCadastro({ nome, email, senha }) {
+    const data = { nome: nome, email: email, senha: senha };
+    const response = await fetch("http://localhost:5001/api/v1/user", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
+    return response;
   }
 
   return (
@@ -124,8 +133,8 @@ export default function Cadastro() {
                 </label>
                 <InputIcon
                   type="password"
-                  name="password"
-                  value={form.password}
+                  name="senha"
+                  value={form.senha}
                   onChange={handleChange}
                   required
                   icon={KeyRound}
@@ -137,8 +146,8 @@ export default function Cadastro() {
 
               <InputIcon
                 type="password"
-                name="confirmPassword"
-                value={form.confirmPassword}
+                name="confirmaSenha"
+                value={form.confirmaSenha}
                 onChange={handleChange}
                 required
                 icon={KeyRound}

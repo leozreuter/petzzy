@@ -19,27 +19,36 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login com:", form);
-    try {
-      await fakeApiLogin();
-      toast.success("Login realizado com sucesso!");
-    } catch {
+    const loginResponse = await ApiLogin(form);
+    const loginResponseBody = await loginResponse.json();
+    if (loginResponseBody.token != null) {
+      toast.success("Logado!");
+      setError(null);
+      localStorage.setItem("accessToken", loginResponseBody.token);
+      await new Promise((r) => setTimeout(r, 1000)); // pausa 1s
+      window.location.href = "/home";
+    } else if (loginResponse.status >= 400 && loginResponse.status < 500) {
       setError("Verifique as credenciais digitadas!");
-      setForm({ password: "" });
       toast.error("Usuário ou senha inválidos!");
+      setForm({ email: form.email, password: "" });
+    } else {
+      setError("Server Error!");
+      toast.error(loginResponseBody.action);
     }
   };
 
-  function fakeApiLogin() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        Math.random() > 0.5 ? resolve() : reject();
-      }, 1000);
+  async function ApiLogin({ email, password }) {
+    const data = { email: email, senha: password };
+    const response = await fetch("http://localhost:5001/api/v1/user/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
+    return response;
   }
 
   return (
-    (document.title = "Faça Login | Petzzy</title>"),
+    (document.title = "Faça Login | Petzzy"),
     (
       <div className="min-h-screen flex items-center flex-col justify-center bg-gradient-to-br from-blue-100 to-blue-200 p-4">
         <motion.div
