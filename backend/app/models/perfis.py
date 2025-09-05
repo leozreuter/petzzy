@@ -44,3 +44,11 @@ class Perfil(db.Model):
         if not result:
             raise NotFoundError(message="O id do perfil informado não foi encontrado",
                                   action="Verifique se o perfil existe.")
+        return result
+
+    def procuraPeloNome(nome):
+        result = Perfil.query.filter_by(desc=nome).first()
+        if not result:
+            raise NotFoundError(message="O id do perfil informado não foi encontrado",
+                                  action="Verifique se o perfil existe.")
+        return result

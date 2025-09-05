@@ -78,12 +78,14 @@ class Usuario(db.Model):
         telefone=props.get("telefone")
         crmv=props.get("crmv")
         id_clinica=props.get("id_clinica")
-
-        if Usuario.verificaEmailUnico(email):
+        
+        if Usuario.verificaEmail(email):
             raise ValidationError(message="O email informado já está em uso",
                                   action="Utilize outro email para realizar o cadastro.")
-        
+
         Perfil.procuraPeloID(id_perfil)
+        
+
         if id_clinica:
             Clinica.procuraPeloID(id_clinica)
 
@@ -102,6 +104,7 @@ class Usuario(db.Model):
         )
         db.session.add(usuario)
         db.session.commit()
+       
         return usuario
   
     def ativarUsuario(self):

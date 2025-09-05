@@ -1,4 +1,5 @@
 from flask import Flask, current_app, jsonify
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
@@ -12,6 +13,7 @@ API_VERSION = os.environ.get("API_VERSION") or "v1"
 
 def create_app():
     app = Flask(__name__)
+    CORS(app, resources={r"*": {"origins": "*"}})
     app.config.from_object("config.Config")
     db.init_app(app)
     migrate.init_app(app, db)
