@@ -15,6 +15,6 @@ if __name__ == "__main__":
             create_default_users()
         
     # Run the Flask app
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port='5001')
     os.environ["DEBUG_MODE"] = "0"
     

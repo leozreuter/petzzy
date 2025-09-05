@@ -1,11 +1,11 @@
 from flask import Blueprint, request, jsonify
 from app.models.usuarios import Usuario, ValidationError
-from flask_jwt_extended import jwt_required
+from app.auth.jwt_middleware import token_required
 
 bp = Blueprint('user', __name__, url_prefix="/api/v1/user")
 
 @bp.route('', methods=['POST'], strict_slashes=False)
-async def criarUsuario():
+async def criarUsuarioPage(current_user):
     """
     Recebe `email, name, password, idperfil` e cria um novo usuário 
     """
@@ -18,7 +18,8 @@ async def criarUsuario():
 
 
 @bp.route('', methods=['GET'], strict_slashes=False)
-async def listarUsuarios():
+@token_required
+def listarUsuariosPage(current_user):
     """
     Retorna uma lista de usuários 
     """
@@ -29,8 +30,8 @@ async def listarUsuarios():
         return jsonify(err.to_dict()),err.to_dict().get("status_code")
     
 @bp.route('/inativar', methods=['POST'], strict_slashes=False)
-#@jwt_required()
-def inativarUsuario():
+@token_required
+def inativarUsuarioPage(current_user):
     data = request.get_json()
     if not data:
         return jsonify({"error": "Corpo da requisição não pode ser vazio."}), 400
@@ -54,8 +55,8 @@ def inativarUsuario():
         return jsonify({"error": f"Ocorreu um erro interno no servidor.{e}"}), 500
     
 @bp.route('/ativar', methods=['POST'], strict_slashes=False)
-#@jwt_required()
-def ativarUsuario():
+@token_required
+def ativarUsuarioPage(current_user):
     data = request.get_json()
     if not data:
         return jsonify({"error": "Corpo da requisição não pode ser vazio."}), 400
@@ -78,3 +79,23 @@ def ativarUsuario():
     except Exception as e:
         return jsonify({"error": f"Ocorreu um erro interno no servidor.{e}"}), 500
     
+@bp.route('/login', methods=['POST'], strict_slashes=False) 
+def autenticarUsuario(): 
+    data = request.get_json() 
+    if not data: 
+        return jsonify({"error": "Corpo da requisição não pode ser vazio."}), 400 
+ 
+    senha = data.get('senha') 
+    email = data.get('email') 
+    if not email or not senha: 
+        raise ValidationError("É necessário fornecer o 'email' e 'senha'.") 
+    usuarioSelecionado = Usuario.verificaEmail(email) 
+    
+    if not usuarioSelecionado.verificaSenha(senha):
+        return jsonify({"error": "Senha incorreta"}), 401
+
+    token, expiracao = usuarioSelecionado.gerarToken()
+    return jsonify({
+        "token": token,
+        "expiracao": expiracao
+    }), 200

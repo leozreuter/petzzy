@@ -17,7 +17,11 @@ export default function InputIcon({
       <input
         type={type}
         placeholder={placeholder}
-        className="bg-transparent outline-none w-full text-sm"
+        className={`bg-transparent outline-none w-full text-sm ${
+          error
+            ? "autofill:shadow-[inset_0_0_0px_1000px_#fecaca] autofill:text-black"
+            : "autofill:shadow-[inset_0_0_0px_1000px_white]"
+        }`}
         {...rest}
       />
     </div>

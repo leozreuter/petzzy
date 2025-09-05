@@ -1,13 +1,14 @@
 from .. import db
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import bcrypt
+import jwt
 
 from app.infra.erros import ValidationError
 from .perfis import Perfil
@@ -44,19 +45,27 @@ class Usuario(db.Model):
     #Validações
   
     #Metodo para verificar a senha
-    def verificaSenha(self, senha) -> bool:
-        return bcrypt.check_password_hash(self.password_hash, senha)
+    def verificaSenha(self, senhaInserida) -> bool:
+        
+        hashedSenhaInserida = bcrypt.hashpw(senhaInserida.encode("utf-8"), self.salt.encode("utf-8"))
+        if hashedSenhaInserida.decode("utf-8")==self.senha:
+            return True
+        return False
+
     
+    def gerarToken(self, expires_in=3600):
+        payload = {
+            "user_id": str(self.id),
+            "exp": datetime.now() + timedelta(seconds=expires_in)
+        }
+        return jwt.encode(payload, "KEY", algorithm="HS256"),payload.get("exp")
+
     @classmethod
-    def verificaEmailUnico(self, email) -> bool:
+    def verificaEmail(self, email):
         return self.query.filter_by(email=email).first()
     
     @classmethod
-    def verificaNomeUnico(self, nome) -> bool:
-        return self.query.filter_by(nome=nome).first()
-    
-    @classmethod
-    def procuraUsuarioPorId(self, id):
+    def verificaID(self, id):
         return self.query.filter_by(id=id).first()
     
     #CRUD
