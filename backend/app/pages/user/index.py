@@ -5,7 +5,7 @@ from app.auth.jwt_middleware import token_required
 bp = Blueprint('user', __name__, url_prefix="/api/v1/user")
 
 @bp.route('', methods=['POST'], strict_slashes=False)
-async def criarUsuarioPage(current_user):
+async def criarUsuarioPage():
     """
     Recebe `email, name, password, idperfil` e cria um novo usuário 
     """
