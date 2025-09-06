@@ -46,7 +46,6 @@ class Usuario(db.Model):
   
     #Metodo para verificar a senha
     def verificaSenha(self, senhaInserida) -> bool:
-        
         hashedSenhaInserida = bcrypt.hashpw(senhaInserida.encode("utf-8"), self.salt.encode("utf-8"))
         if hashedSenhaInserida.decode("utf-8")==self.senha:
             return True
@@ -67,6 +66,16 @@ class Usuario(db.Model):
     @classmethod
     def verificaID(self, id):
         return self.query.filter_by(id=id).first()
+    
+    @classmethod
+    def verificaID(cls, id):
+        usuario = cls.query.filter_by(id=id).first()
+        if not usuario:
+            raise ValidationError(
+                message=f"Usuário com ID '{id}' não encontrado.",
+                action="Verifique se o ID fornecido está correto."
+            )
+        return usuario
     
     #CRUD
   
