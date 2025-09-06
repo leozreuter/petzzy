@@ -31,8 +31,8 @@ def autenticarUsuario():
     
     usuarioSelecionado = Usuario.verificaEmail(email)
     
-    if not usuarioSelecionado.verificaSenha(senha):
-        return jsonify({"error": "Senha incorreta"}), 401
+    if (usuarioSelecionado is None) or not (usuarioSelecionado.verificaSenha(senha)):
+        return jsonify({"error": "Credencias incorretas"}), 401
 
     token, expiracao = usuarioSelecionado.gerarToken()
     return jsonify({
@@ -63,7 +63,7 @@ def inativarUsuarioPage(current_user):
         if not id:
             raise ValidationError("É necessário fornecer o 'id' do usuário.")
 
-        usuarioSelecionado = Usuario.procuraUsuarioPorId(id)
+        usuarioSelecionado = Usuario.verificaID(id)
         if not usuarioSelecionado:
             return jsonify({"error": "Usuário não encontrado."}), 404
 
@@ -88,7 +88,7 @@ def ativarUsuarioPage(current_user):
         if not id:
             raise ValidationError("É necessário fornecer o 'id' do usuário.")
 
-        usuarioSelecionado = Usuario.procuraUsuarioPorId(id)
+        usuarioSelecionado = Usuario.verificaID(id)
         if not usuarioSelecionado:
             return jsonify({"error": "Usuário não encontrado."}), 404
 

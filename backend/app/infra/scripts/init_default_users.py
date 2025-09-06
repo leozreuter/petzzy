@@ -7,20 +7,25 @@ import bcrypt
 def create_default_users():
     try:
         Perfil.procuraPeloNome("Administrador")
-    except Exception as e: 
-        perfil = Perfil(
-                desc="Administrador"
-            )
-        db.session.add(perfil)
-        db.session.commit()
-        print("Criado Perfil ADMIN")
+    except Exception as e:
+        print(e) 
+
+    perfil = Perfil(
+            desc="Administrador"
+        )
+    db.session.add(perfil)
+    db.session.commit()
+    print("Criado Perfil ADMIN")
         
     try: 
         Usuario.verificaEmail("admin@petzzy.com")
     except Exception as e: 
+        print(e)
+
+    
+    if not Usuario.verificaEmail("admin@petzzy.com"):
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw("admin".encode('utf-8'), salt)
-
         usuario = Usuario(
             nome="admin",
             email="admin@petzzy.com",
@@ -34,22 +39,24 @@ def create_default_users():
 
     try: 
         Perfil.procuraPeloNome("Usuário")
-    except Exception as e: 
-        perfilUsuario = Perfil(
-                desc="Usuário"
-            )
-        db.session.add(perfilUsuario)
-        db.session.commit()
-        print("Criado Perfil USUARIO")
+    except Exception as e:
+        print(e)
+
+    perfilUsuario = Perfil(
+            desc="Usuário"
+        )
+    db.session.add(perfilUsuario)
+    db.session.commit()
+    print("Criado Perfil USUARIO")
+    
     try:
         Perfil.procuraPeloNome("Veterinário")
     except Exception as e:
-        perfilVet = Perfil(
-                desc="Veterinário"
-            )
-        db.session.add(perfil)
-        db.session.commit()
-        print("Criado Perfil VETERINARIO")
-
-    except Exception as e:
         print(e)
+
+    perfilVet = Perfil(
+            desc="Veterinário"
+        )
+    db.session.add(perfilVet)
+    db.session.commit()
+    print("Criado Perfil VETERINARIO")

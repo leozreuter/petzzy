@@ -27,10 +27,16 @@ def create_app():
     from .pages.home.index import bp as home_bp
     from .pages.user.index import bp as user_bp
     from .pages.perfil.index import bp as perfil_bp
+    from .pages.raca.index import bp as raca_bp
+    from .pages.especie.index import bp as especie_bp
+    from .pages.pet.index import bp as pet_bp
 
     # Register blueprint
     app.register_blueprint(home_bp, url_prefix=f'/api/{API_VERSION}/home')
     app.register_blueprint(user_bp, url_prefix=f'/api/{API_VERSION}/user')
     app.register_blueprint(perfil_bp, url_prefix=f'/api/{API_VERSION}/perfil')
+    app.register_blueprint(raca_bp, url_prefix=f'/api/{API_VERSION}/raca')
+    app.register_blueprint(especie_bp, url_prefix=f'/api/{API_VERSION}/especie')
+    app.register_blueprint(pet_bp, url_prefix=f'/api/{API_VERSION}/pet')
 
     return app

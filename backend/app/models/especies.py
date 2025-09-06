@@ -35,44 +35,44 @@ class Especie(db.Model):
         return especie
         
     @classmethod
-    def verificaNomeUnico(cls, nome):
-        return cls.query.filter_by(nome=nome).first()
+    def verificaDescUnico(cls, desc):
+        return cls.query.filter_by(desc=desc).first()
 
     @classmethod
     def criarEspecie(cls, props):
-        nome = props.get("nome")
+        desc = props.get("desc")
 
-        if not nome:
+        if not desc:
             raise ValidationError(
-                message="O campo 'nome' é obrigatório.",
-                action="Forneça o nome para criar a espécie."
+                message="O campo 'desc' é obrigatório.",
+                action="Forneça o desc para criar a espécie."
             )
         
-        nome_tratado = nome.strip().capitalize()
+        desc_tratado = desc.strip().capitalize()
 
-        if cls.verificaNomeUnico(nome_tratado):
+        if cls.verificaDescUnico(desc_tratado):
             raise ValidationError(
-                message=f"A espécie '{nome_tratado}' já está cadastrada.",
-                action="Utilize outro nome."
+                message=f"A espécie '{desc_tratado}' já está cadastrada.",
+                action="Utilize outro desc."
             )
 
-        nova_especie = cls(nome=nome_tratado)
+        nova_especie = cls(desc=desc_tratado)
         
         db.session.add(nova_especie)
         db.session.commit()
         return nova_especie
 
     def atualizarEspecie(self, props):
-        nome_novo = props.get('nome', self.nome).strip().capitalize()
+        desc_novo = props.get('desc', self.desc).strip().capitalize()
         
-        especie_existente = self.verificaNomeUnico(nome_novo)
+        especie_existente = self.verificaDescUnico(desc_novo)
         if especie_existente and especie_existente.id != self.id:
             raise ValidationError(
-                message=f"A espécie '{nome_novo}' já existe.",
-                action="Escolha outro nome."
+                message=f"A espécie '{desc_novo}' já existe.",
+                action="Escolha outro desc."
             )
 
-        self.nome = nome_novo
+        self.desc = desc_novo
         db.session.commit()
         return self
 
@@ -91,7 +91,7 @@ class Especie(db.Model):
     def retornaDicionario(self):
         return {
             "id": str(self.id),
-            "nome": self.nome,
+            "desc": self.desc,
             "status": self.status
         }
 

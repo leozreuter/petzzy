@@ -35,8 +35,8 @@ class Raca(db.Model):
         return raca
         
     @classmethod
-    def verificaNomeUnico(cls, nome, especie):
-        return cls.query.filter_by(nome=nome, especie=especie).first()
+    def verificaNomeUnico(cls, nome, id_especie):
+        return cls.query.filter_by(desc=nome, id_especie=id_especie).first()
 
     @classmethod
     def criarRaca(cls, props):
@@ -59,8 +59,8 @@ class Raca(db.Model):
             )
 
         nova_raca = cls(
-            nome=nome_tratado,
-            especie=especie_tratada
+            desc=nome_tratado,
+            id_especie=especie_tratada
         )
         
         db.session.add(nova_raca)
@@ -68,8 +68,8 @@ class Raca(db.Model):
         return nova_raca
 
     def atualizarRaca(self, props):
-        nome_novo = props.get('nome', self.nome).strip()
-        especie_nova = props.get('especie', self.especie).strip()
+        nome_novo = props.get('nome', self.desc).strip()
+        especie_nova = props.get('especie', self.id_especie).strip()
         
         # Verifica se a nova combinação de nome e espécie já existe em outro registro
         raca_existente = self.verificaNomeUnico(nome_novo, especie_nova)
@@ -79,8 +79,8 @@ class Raca(db.Model):
                 action="Escolha outra combinação de nome e espécie."
             )
 
-        self.nome = nome_novo
-        self.especie = especie_nova
+        self.desc = nome_novo
+        self.id_especie = especie_nova
         self.dthr_alt = datetime.now()
         db.session.commit()
         return self
@@ -100,8 +100,8 @@ class Raca(db.Model):
     def retornaDicionario(self):
         return {
             "id": str(self.id),
-            "nome": self.nome,
-            "especie": self.especie,
+            "nome": self.desc,
+            "especie": self.id_especie,
             "status": self.status,
             "dthr_alt": self.dthr_alt.isoformat(),
             "dthr_ins": self.dthr_ins.isoformat()
