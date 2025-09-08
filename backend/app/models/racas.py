@@ -16,7 +16,7 @@ class Raca(db.Model):
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     id_especie = db.Column(UUID(as_uuid=True), ForeignKey("especies.id"), nullable=False)
-    desc = db.Column(db.String(255), nullable=False)
+    nome = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(20), nullable=False, default="ativo")
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
@@ -36,17 +36,17 @@ class Raca(db.Model):
         
     @classmethod
     def verificaNomeUnico(cls, nome, id_especie):
-        return cls.query.filter_by(desc=nome, id_especie=id_especie).first()
+        return cls.query.filter_by(nome=nome, id_especie=id_especie).first()
 
     @classmethod
     def criarRaca(cls, props):
         nome = props.get("nome")
-        especie = props.get("especie")
+        especie = props.get("id_especie")
 
         if not nome or not especie:
             raise ValidationError(
                 message="Campos obrigatórios ausentes.",
-                action="Forneça 'nome' e 'especie' para criar a raça."
+                action="Forneça 'nome' e 'id_especie' para criar a raça."
             )
         
         nome_tratado = nome.strip()
@@ -59,7 +59,7 @@ class Raca(db.Model):
             )
 
         nova_raca = cls(
-            desc=nome_tratado,
+            nome=nome_tratado,
             id_especie=especie_tratada
         )
         
@@ -68,7 +68,7 @@ class Raca(db.Model):
         return nova_raca
 
     def atualizarRaca(self, props):
-        nome_novo = props.get('nome', self.desc).strip()
+        nome_novo = props.get('nome', self.nome).strip()
         especie_nova = props.get('especie', self.id_especie).strip()
         
         # Verifica se a nova combinação de nome e espécie já existe em outro registro
@@ -79,7 +79,7 @@ class Raca(db.Model):
                 action="Escolha outra combinação de nome e espécie."
             )
 
-        self.desc = nome_novo
+        self.nome = nome_novo
         self.id_especie = especie_nova
         self.dthr_alt = datetime.now()
         db.session.commit()
@@ -100,7 +100,7 @@ class Raca(db.Model):
     def retornaDicionario(self):
         return {
             "id": str(self.id),
-            "nome": self.desc,
+            "nome": self.nome,
             "especie": self.id_especie,
             "status": self.status,
             "dthr_alt": self.dthr_alt.isoformat(),
