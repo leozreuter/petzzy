@@ -101,7 +101,7 @@ class Raca(db.Model):
         return {
             "id": str(self.id),
             "nome": self.nome,
-            "especie": self.id_especie,
+            "id_especie": self.id_especie,
             "status": self.status,
             "dthr_alt": self.dthr_alt.isoformat(),
             "dthr_ins": self.dthr_ins.isoformat()

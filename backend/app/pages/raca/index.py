@@ -40,7 +40,7 @@ def inativarRacaPage(current_user):
         raca_selecionada = Raca.procuraPeloID(raca_id)
         raca_selecionada.inativarRaca()
 
-        return jsonify({"message": f"Raça '{raca_selecionada.desc}' foi inativada com sucesso."}), 200
+        return jsonify({"message": f"Raça '{raca_selecionada.nome}' foi inativada com sucesso."}), 200
     except ValidationError as e:
         return jsonify(e.to_dict()), e.to_dict().get("status_code", 400)
     except Exception as e:
@@ -61,7 +61,7 @@ def ativarRacaPage(current_user):
         raca_selecionada = Raca.procuraPeloID(raca_id)
         raca_selecionada.ativarRaca()
 
-        return jsonify({"message": f"Raça '{raca_selecionada.desc}' foi ativada com sucesso."}), 200
+        return jsonify({"message": f"Raça '{raca_selecionada.nome}' foi ativada com sucesso."}), 200
     except ValidationError as e:
         return jsonify(e.to_dict()), e.to_dict().get("status_code", 400)
     except Exception as e:

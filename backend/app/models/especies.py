@@ -17,7 +17,7 @@ class Especie(db.Model):
     __tablename__ = "especies"
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
-    desc = db.Column(db.String(255), nullable=False)
+    nome = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(20), nullable=False, default="ativo")
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
@@ -35,44 +35,44 @@ class Especie(db.Model):
         return especie
         
     @classmethod
-    def verificaDescUnico(cls, desc):
-        return cls.query.filter_by(desc=desc).first()
+    def verificaNomeUnico(cls, nome):
+        return cls.query.filter_by(nome=nome).first()
 
     @classmethod
     def criarEspecie(cls, props):
-        desc = props.get("desc")
+        nome = props.get("nome")
 
-        if not desc:
+        if not nome:
             raise ValidationError(
-                message="O campo 'desc' é obrigatório.",
-                action="Forneça o desc para criar a espécie."
+                message="O campo 'nome' é obrigatório.",
+                action="Forneça o nome para criar a espécie."
             )
         
-        desc_tratado = desc.strip().capitalize()
+        nome_tratado = nome.strip().capitalize()
 
-        if cls.verificaDescUnico(desc_tratado):
+        if cls.verificaNomeUnico(nome_tratado):
             raise ValidationError(
-                message=f"A espécie '{desc_tratado}' já está cadastrada.",
-                action="Utilize outro desc."
+                message=f"A espécie '{nome_tratado}' já está cadastrada.",
+                action="Utilize outro nome."
             )
 
-        nova_especie = cls(desc=desc_tratado)
+        nova_especie = cls(nome=nome_tratado)
         
         db.session.add(nova_especie)
         db.session.commit()
         return nova_especie
 
     def atualizarEspecie(self, props):
-        desc_novo = props.get('desc', self.desc).strip().capitalize()
+        nome_novo = props.get('nome', self.nome).strip().capitalize()
         
-        especie_existente = self.verificaDescUnico(desc_novo)
+        especie_existente = self.verificaNomeUnico(nome_novo)
         if especie_existente and especie_existente.id != self.id:
             raise ValidationError(
-                message=f"A espécie '{desc_novo}' já existe.",
-                action="Escolha outro desc."
+                message=f"A espécie '{nome_novo}' já existe.",
+                action="Escolha outro nome."
             )
 
-        self.desc = desc_novo
+        self.nome = nome_novo
         db.session.commit()
         return self
 
@@ -91,7 +91,7 @@ class Especie(db.Model):
     def retornaDicionario(self):
         return {
             "id": str(self.id),
-            "desc": self.desc,
+            "nome": self.nome,
             "status": self.status
         }
 

@@ -40,7 +40,7 @@ def inativarEspeciePage(current_user):
         especie_selecionada = Especie.procuraPeloID(especie_id)
         especie_selecionada.inativarEspecie()
 
-        return jsonify({"message": f"Espécie '{especie_selecionada.desc}' foi inativada com sucesso."}), 200
+        return jsonify({"message": f"Espécie '{especie_selecionada.nome}' foi inativada com sucesso."}), 200
     except ValidationError as e:
         return jsonify(e.to_dict()), e.to_dict().get("status_code", 400)
     except Exception as e:
@@ -61,7 +61,7 @@ def ativarEspeciePage(current_user):
         especie_selecionada = Especie.procuraPeloID(especie_id)
         especie_selecionada.ativarEspecie()
 
-        return jsonify({"message": f"Espécie '{especie_selecionada.desc}' foi ativada com sucesso."}), 200
+        return jsonify({"message": f"Espécie '{especie_selecionada.nome}' foi ativada com sucesso."}), 200
     except ValidationError as e:
         return jsonify(e.to_dict()), e.to_dict().get("status_code", 400)
     except Exception as e:
