@@ -16,7 +16,7 @@ class Raca(db.Model):
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     id_especie = db.Column(UUID(as_uuid=True), ForeignKey("especies.id"), nullable=False)
-    desc = db.Column(db.String(255), nullable=False)
+    nome = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(20), nullable=False, default="ativo")
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
@@ -35,18 +35,18 @@ class Raca(db.Model):
         return raca
         
     @classmethod
-    def verificaNomeUnico(cls, nome, especie):
-        return cls.query.filter_by(nome=nome, especie=especie).first()
+    def verificaNomeUnico(cls, nome, id_especie):
+        return cls.query.filter_by(nome=nome, id_especie=id_especie).first()
 
     @classmethod
     def criarRaca(cls, props):
         nome = props.get("nome")
-        especie = props.get("especie")
+        especie = props.get("id_especie")
 
         if not nome or not especie:
             raise ValidationError(
                 message="Campos obrigatórios ausentes.",
-                action="Forneça 'nome' e 'especie' para criar a raça."
+                action="Forneça 'nome' e 'id_especie' para criar a raça."
             )
         
         nome_tratado = nome.strip()
@@ -60,7 +60,7 @@ class Raca(db.Model):
 
         nova_raca = cls(
             nome=nome_tratado,
-            especie=especie_tratada
+            id_especie=especie_tratada
         )
         
         db.session.add(nova_raca)
@@ -69,7 +69,7 @@ class Raca(db.Model):
 
     def atualizarRaca(self, props):
         nome_novo = props.get('nome', self.nome).strip()
-        especie_nova = props.get('especie', self.especie).strip()
+        especie_nova = props.get('especie', self.id_especie).strip()
         
         # Verifica se a nova combinação de nome e espécie já existe em outro registro
         raca_existente = self.verificaNomeUnico(nome_novo, especie_nova)
@@ -80,7 +80,7 @@ class Raca(db.Model):
             )
 
         self.nome = nome_novo
-        self.especie = especie_nova
+        self.id_especie = especie_nova
         self.dthr_alt = datetime.now()
         db.session.commit()
         return self
@@ -101,7 +101,7 @@ class Raca(db.Model):
         return {
             "id": str(self.id),
             "nome": self.nome,
-            "especie": self.especie,
+            "id_especie": self.id_especie,
             "status": self.status,
             "dthr_alt": self.dthr_alt.isoformat(),
             "dthr_ins": self.dthr_ins.isoformat()

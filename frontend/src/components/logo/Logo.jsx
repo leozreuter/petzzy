@@ -1,6 +1,6 @@
 export default function Logo({
   type = "text",
-  variant = "primary",
+  className = "primary",
   size = "medium", // default
 }) {
   // Map de tamanhos para arquivos de imagem
@@ -18,6 +18,6 @@ export default function Logo({
       ? `/logo_${sizeSuffix}.png`
       : `/logo_${type}_${sizeSuffix}.png`;
   return (
-    <img className={`img ${variant}`} src={src_defined} alt="Petzzy Logo" />
+    <img className={`img ${className}`} src={src_defined} alt="Petzzy Logo" />
   );
 }

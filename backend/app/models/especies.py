@@ -17,7 +17,7 @@ class Especie(db.Model):
     __tablename__ = "especies"
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
-    desc = db.Column(db.String(255), nullable=False)
+    nome = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(20), nullable=False, default="ativo")
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)

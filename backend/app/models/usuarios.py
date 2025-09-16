@@ -60,7 +60,7 @@ class Usuario(db.Model):
         return jwt.encode(payload, "KEY", algorithm="HS256"),payload.get("exp")
 
     @classmethod
-    def verificaEmail(self, email):
+    def verificaEmail(self, email: str):
         return self.query.filter_by(email=email).first()
     
     @classmethod
