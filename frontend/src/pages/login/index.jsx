@@ -25,6 +25,7 @@ export default function LoginPage() {
       toast.success("Logado!");
       setError(null);
       localStorage.setItem("accessToken", loginResponseBody.token);
+      localStorage.setItem("nomeCliente", loginResponseBody.nome);
       await new Promise((r) => setTimeout(r, 1000)); // pausa 1s
       window.location.href = "/home";
     } else if (loginResponse.status >= 400 && loginResponse.status < 500) {

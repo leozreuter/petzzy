@@ -121,12 +121,13 @@ class Pet(db.Model):
             "obs": self.obs,
             "id_raca": str(self.id_raca),
             "raca": self.raca_fk.nome if self.raca_fk else None, 
+            "especie": self.raca_fk.especie_fk.nome if self.raca_fk else None,
             "tutor": self.tutor_fk.nome if self.tutor_fk else None, 
             "dthr_alt": self.dthr_alt.isoformat(),
             "dthr_ins": self.dthr_ins.isoformat()
         }
 
     @staticmethod
-    def listaPets():
-        pets = Pet.query.all()
+    def listaPets(user):
+        pets = Pet.query.filter_by(id_tutor=user.id).all()
         return [pet.retornaDicionario() for pet in pets]

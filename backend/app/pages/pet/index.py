@@ -20,7 +20,7 @@ def criarPetPage(current_user):
 @token_required
 def listarPetsPage(current_user):
     try:
-        pets = Pet.listaPets()
+        pets = Pet.listaPets(current_user)
         return jsonify(pets), 200
     except Exception as err:
         return jsonify({"error": "Ocorreu um erro inesperado", "details": str(err)}), 500

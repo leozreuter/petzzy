@@ -36,6 +36,7 @@ def autenticarUsuario():
 
     token, expiracao = usuarioSelecionado.gerarToken()
     return jsonify({
+        "nome": usuarioSelecionado.nome.title(),
         "token": token,
         "expiracao": expiracao
     }), 200
