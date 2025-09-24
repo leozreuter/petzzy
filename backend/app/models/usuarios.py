@@ -52,7 +52,7 @@ class Usuario(db.Model):
         return False
 
     
-    def gerarToken(self, expires_in=3600):
+    def gerarToken(self, expires_in=60*60*24*30):
         payload = {
             "user_id": str(self.id),
             "exp": datetime.now() + timedelta(seconds=expires_in)

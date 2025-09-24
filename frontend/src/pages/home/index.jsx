@@ -25,7 +25,7 @@ export default function Home() {
               Seja um cliente
             </a>
             <a
-              href="#"
+              href="cadastro"
               className="text-lg/8 font-semibold text-petzzy-blue hover:text-blue-800 hover:border-b-2 hover:border-petzzy-blue transition-all"
             >
               Cadastre-se
@@ -39,7 +39,7 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="pt-5 pb-5 h-[80dvh] w-[95dvw] flex-shrink-0 flex justify-self-center">
+        <div className="pt-[10dvh] pb-5 h-[70dvh] w-[95dvw] flex-shrink-0 flex justify-self-center">
           <div className=" w-[70%]">
             <div className="ml-6 w-full h-[50%] flex flex-col gap-2 font-baloo">
               <h1 className="text-petzzy-blue text-7xl font-bold w-[70%]">
