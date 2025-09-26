@@ -1,7 +1,10 @@
 import useSWR from "swr";
-
+import { useState } from "react";
 import Logo from "../../components/logo/Logo";
 import Icone from "../../components/Icone";
+
+import Modal from "./modal"; // Importa o componente Modal
+import AddPetForm from "./addPetForm"; // Importa o formulário de adicionar pet
 
 async function fetchMyPets(key) {
   const response = await fetch(process.env.REACT_APP_BACKEND_SERVER + key, {
@@ -21,24 +24,31 @@ const logout = async () => {
   window.location.href = "/login";
 };
 
-const addPet = async () => {
-  await new Promise((r) => setTimeout(r, 200)); // pausa 0.2s
-  window.location.href = "/cadastrar-pet";
-};
-
 const addNotification = async () => {
   await new Promise((r) => setTimeout(r, 200)); // pausa 0.2s
   window.location.href = "/agendamento";
 };
 
 export default function Dashboard() {
-  const {
+  let {
     data: myPets,
     error,
     isLoading,
   } = useSWR("/api/v1/pet", fetchMyPets, {
-    refreshInterval: 60000,
+    refreshInterval: 30000,
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Funções para abrir e fechar o modal
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = async () => {
+    setIsModalOpen(false);
+    myPets = await fetchMyPets("/api/v1/pet");
+  };
+
+  const addPet = async () => {
+    openModal();
+  };
 
   const sexoColors = {
     M: "bg-blue-300",
@@ -67,8 +77,9 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="w-[99dvw] pt-6 self-center flex flex-row justify-center gap-10">
-          <div className="flex flex-col max-w-[50dvw] min-w-[40dvw] min-h-[60dvh] gap-5 self-center bg-white p-5 rounded-lg shadow-xl">
-            <div className="flex w-[100%] justify-between items-center">
+          <div className="flex flex-col max-w-[50dvw] min-w-[40dvw] h-[60dvh]  self-center bg-white p-5 rounded-lg shadow-xl">
+            {/* Header MEUS PETS */}
+            <div className="flex w-[100%] pb-1 justify-between items-center gap-5 relative">
               <h1 className="text-3xl font-bold text-gray-700">Meus Pets</h1>
               <div
                 onClick={addPet}
@@ -78,8 +89,9 @@ export default function Dashboard() {
                   + Adicionar Pet
                 </h3>
               </div>
+              <div class="absolute -bottom-7 left-0 w-full h-8 bg-gradient-to-b from-white to-transparent"></div>
             </div>
-            <div className="flex flex-wrap flex-row gap-5 ">
+            <div className="flex flex-wrap w-[100%] pb-2 h-[100%] bg-transparent flex-row justify-center gap-5 overflow-y-scroll">
               {isLoading ? (
                 <p>Carregando pets...</p>
               ) : error ? (
@@ -88,8 +100,8 @@ export default function Dashboard() {
                 myPets.map((pet, index) => (
                   <div
                     key={index}
-                    className="flex flex-col gap-2 items-center border-[1px] w-[33%] h-auto min-h bg-gray-100 rounded-xl p-3 hover:bg-gray-200 transition-all duration-1"
-                    style={{ boxShadow: "-6px 6px 20px rgba(0, 0, 0, 0.25)" }}
+                    className="flex flex-col mt-2 items-center border-[1px] w-[30%] h-min bg-gray-100 rounded-xl p-3 hover:bg-gray-200 transition-all duration-1"
+                    style={{ boxShadow: "-6px 6px 10px rgba(0, 0, 0, 0.15)" }}
                   >
                     <div
                       className={`rounded-full h-28 w-28 flex items-center justify-center p-6 ${
@@ -113,8 +125,9 @@ export default function Dashboard() {
               )}
             </div>
           </div>
-          <div className="flex flex-col max-w-[30dvw]  min-h-[60dvh] gap-5 self-center bg-white p-5 rounded-lg shadow-xl">
-            <div className="flex w-[100%] justify-between items-center gap-5">
+          <div className="flex flex-col max-w-[30dvw] h-[60dvh] self-center bg-white p-5 rounded-lg shadow-xl ">
+            {/* Header PROX LEMBRETES */}
+            <div className="flex w-[100%] justify-between items-center gap-5 relative">
               <h1 className="text-3xl font-bold text-gray-700">
                 Próximos lembretes
               </h1>
@@ -126,8 +139,9 @@ export default function Dashboard() {
                   + Novo Lembrete
                 </h3>
               </div>
+              <div class="absolute -bottom-1/2 left-0 w-full h-10 bg-gradient-to-b from-white to-transparent"></div>
             </div>
-            <div className="flex flex-wrap flex-row gap-5 ">
+            <div className="flex flex-wrap w-[100%] pb-2 bg-transparent justify-center flex-row overflow-y-scroll">
               {isLoading ? (
                 <p>Carregando lembretes...</p>
               ) : error ? (
@@ -136,11 +150,11 @@ export default function Dashboard() {
                 myPets.map((pet, index) => (
                   <div
                     key={index}
-                    className="flex flex-col gap-2 w-[100%] bg-gray-100 rounded-xl p-3 hover:bg-gray-200 transition-all duration-1 border-l-8 border-violet-500"
-                    style={{ boxShadow: "-6px 6px 20px rgba(0, 0, 0, 0.25)" }}
+                    className="flex flex-col gap-2 w-[90%] h-24 mt-5 bg-gray-100 rounded-xl p-3 hover:bg-gray-200 transition-all duration-1 border-l-8 border-violet-500"
+                    style={{ boxShadow: "-6px 6px 15px rgba(0, 0, 0, 0.15)" }}
                   >
                     <div className="flex flex-col">
-                      <h2 className="font-medium text-2xl text-gray-900">
+                      <h2 className="font-medium text-xl text-gray-900">
                         {"Tipo de consulta"} - {pet.nome}
                       </h2>
                       <span className="font-medium text-md text-gray-700">
@@ -156,6 +170,9 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <AddPetForm onClose={closeModal} />
+        </Modal>
       </div>
     )
   );

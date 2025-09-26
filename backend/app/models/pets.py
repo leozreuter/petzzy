@@ -29,7 +29,7 @@ class Pet(db.Model):
     status = db.Column(db.String(20), nullable=False, default="ativo")
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    
+
     tutor_fk = relationship("Usuario", back_populates="pets")
     raca_fk = relationship("Raca", back_populates="pets")
     
@@ -47,10 +47,10 @@ class Pet(db.Model):
         return pet
 
     @classmethod
-    def criarPet(cls, props):
+    def criarPet(cls, currentUser, props):
         nome = props.get("nome")
-        id_tutor = props.get("id_tutor")
         id_raca = props.get("id_raca")
+        id_tutor = currentUser.id
         
         if not all([nome, id_tutor, id_raca]):
             raise ValidationError(

@@ -111,3 +111,9 @@ class Raca(db.Model):
     def listaRacas():
         racas = Raca.query.all()
         return [raca.retornaDicionario() for raca in racas]
+
+    @staticmethod
+    def listaRacasPorEspecie(especieFilterId):
+        racas = Raca.query.filter_by(id_especie=especieFilterId).all()
+        print(racas)
+        return [raca.retornaDicionario() for raca in racas]

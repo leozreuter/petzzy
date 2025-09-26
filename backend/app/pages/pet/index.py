@@ -9,7 +9,7 @@ bp = Blueprint('pet', __name__, url_prefix="/api/v1/pet")
 def criarPetPage(current_user):
     try:
         data = request.get_json()
-        pet = Pet.criarPet(data)
+        pet = Pet.criarPet(current_user,data)
         return jsonify(pet.retornaDicionario()), 201
     except ValidationError as err:
         return jsonify(err.to_dict()), err.to_dict().get("status_code", 400)
