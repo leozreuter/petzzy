@@ -5,6 +5,7 @@ import Icone from "../../components/Icone";
 
 import Modal from "./modal"; // Importa o componente Modal
 import AddPetForm from "./addPetForm"; // Importa o formulário de adicionar pet
+import AddAtendimentoForm from "./addAtendimentoForm"; // Importa o formulário de adicionar pet
 
 async function fetchMyPets(key) {
   const response = await fetch(process.env.REACT_APP_BACKEND_SERVER + key, {
@@ -24,31 +25,69 @@ const logout = async () => {
   window.location.href = "/login";
 };
 
-const addNotification = async () => {
-  await new Promise((r) => setTimeout(r, 200)); // pausa 0.2s
-  window.location.href = "/agendamento";
-};
-
 export default function Dashboard() {
   let {
     data: myPets,
     error,
     isLoading,
+    mutate: mutatePets,
   } = useSWR("/api/v1/pet", fetchMyPets, {
+    refreshInterval: 30000,
+  });
+  let {
+    data: myAtendimentos,
+    error: errorAtendimentos,
+    isLoading: isLoadingAtendimentos,
+    mutate: mutateAtendimentos,
+  } = useSWR("/api/v1/atendimento", fetchMyPets, {
     refreshInterval: 30000,
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // Funções para abrir e fechar o modal
+  const [modalType, setModalType] = useState("");
   const openModal = () => setIsModalOpen(true);
+
   const closeModal = async () => {
     setIsModalOpen(false);
-    myPets = await fetchMyPets("/api/v1/pet");
+    await mutatePets();
+    await mutateAtendimentos();
   };
 
   const addPet = async () => {
+    setModalType("pet");
     openModal();
   };
+
+  const addAtendimento = async () => {
+    setModalType("atendimento");
+    openModal();
+  };
+
+  function dt_atentimento_formatado(dthr) {
+    const date = new Date(dthr);
+
+    const diaSemana = new Intl.DateTimeFormat("pt-BR", {
+      weekday: "long",
+    }).format(date);
+    const dia = date.getDate();
+    const mes = new Intl.DateTimeFormat("pt-BR", { month: "long" }).format(
+      date
+    );
+    const ano = date.getFullYear();
+
+    // primeira letra maiúscula no dia da semana e mês
+    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+    return `${capitalize(diaSemana)}, ${dia} de ${capitalize(mes)} de ${ano}`;
+  }
+
+  function hr_atentimento_formatado(dthr) {
+    const date = new Date(dthr);
+    const horas = String(date.getHours()).padStart(2, "0");
+    const minutos = String(date.getMinutes()).padStart(2, "0");
+
+    return `${horas}:${minutos}`;
+  }
 
   const sexoColors = {
     M: "bg-blue-300",
@@ -77,7 +116,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="w-[99dvw] pt-6 self-center flex flex-row justify-center gap-10">
-          <div className="flex flex-col max-w-[50dvw] min-w-[40dvw] h-[60dvh]  self-center bg-white p-5 rounded-lg shadow-xl">
+          <div className="flex flex-col w-[40dvw] h-[60dvh] self-center bg-white p-5 rounded-lg shadow-xl">
             {/* Header MEUS PETS */}
             <div className="flex w-[100%] pb-1 justify-between items-center gap-5 relative">
               <h1 className="text-3xl font-bold text-gray-700">Meus Pets</h1>
@@ -125,43 +164,44 @@ export default function Dashboard() {
               )}
             </div>
           </div>
-          <div className="flex flex-col max-w-[30dvw] h-[60dvh] self-center bg-white p-5 rounded-lg shadow-xl ">
+          <div className="flex flex-col w-[40dvw] h-[60dvh] self-center bg-white p-5 rounded-lg shadow-xl ">
             {/* Header PROX LEMBRETES */}
             <div className="flex w-[100%] justify-between items-center gap-5 relative">
               <h1 className="text-3xl font-bold text-gray-700">
                 Próximos lembretes
               </h1>
               <div
-                onClick={addNotification}
+                onClick={addAtendimento}
                 className="bg-yellow-500 rounded-2xl max-w-40 min-w-32 h-10 text-center flex justify-center items-center cursor-pointer hover:bg-yellow-600 transition-all duration-200"
               >
                 <h3 className="font-semibold text-white mr-4 ml-4">
                   + Novo Lembrete
                 </h3>
               </div>
-              <div class="absolute -bottom-1/2 left-0 w-full h-10 bg-gradient-to-b from-white to-transparent"></div>
+              <div class="absolute -bottom-10 left-0 w-full h-10 bg-gradient-to-b from-white to-transparent"></div>
             </div>
             <div className="flex flex-wrap w-[100%] pb-2 bg-transparent justify-center flex-row overflow-y-scroll">
-              {isLoading ? (
+              {isLoadingAtendimentos ? (
                 <p>Carregando lembretes...</p>
-              ) : error ? (
-                <p>Erro ao carregar pets</p>
+              ) : errorAtendimentos ? (
+                <p>Erro ao carregar atendimentos</p>
               ) : (
-                myPets.map((pet, index) => (
+                myAtendimentos.map((atendimento, index) => (
                   <div
                     key={index}
-                    className="flex flex-col gap-2 w-[90%] h-24 mt-5 bg-gray-100 rounded-xl p-3 hover:bg-gray-200 transition-all duration-1 border-l-8 border-violet-500"
+                    className="flex flex-col gap-2 w-[90%] h-24 h-min mt-5 bg-gray-100 rounded-xl p-3 hover:bg-gray-200 transition-all duration-1 border-l-8 border-violet-500"
                     style={{ boxShadow: "-6px 6px 15px rgba(0, 0, 0, 0.15)" }}
                   >
                     <div className="flex flex-col">
                       <h2 className="font-medium text-xl text-gray-900">
-                        {"Tipo de consulta"} - {pet.nome}
+                        {"Tipo de consulta"} - {atendimento.nome_fantasia}
                       </h2>
                       <span className="font-medium text-md text-gray-700">
-                        Terça-feira, 25 de Setembro de 2025
+                        {dt_atentimento_formatado(atendimento.dthr_atendimento)}
                       </span>
                       <span className="text-sm text-gray-600">
-                        14:30 - Clínica PetCare
+                        {hr_atentimento_formatado(atendimento.dthr_atendimento)}{" "}
+                        - {atendimento.clinica.toUpperCase()}
                       </span>
                     </div>
                   </div>
@@ -171,7 +211,10 @@ export default function Dashboard() {
           </div>
         </div>
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <AddPetForm onClose={closeModal} />
+          {modalType === "pet" && <AddPetForm onClose={closeModal} />}
+          {modalType === "atendimento" && (
+            <AddAtendimentoForm onClose={closeModal} />
+          )}
         </Modal>
       </div>
     )

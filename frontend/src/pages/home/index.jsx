@@ -2,6 +2,12 @@ import Logo from "../../components/logo/Logo";
 import { ClipboardList, MapPinCheck, CalendarCheck } from "lucide-react";
 
 export default function Home() {
+  function agendar() {
+    localStorage.getItem("accessToken") != null
+      ? (window.location.href = "/home")
+      : (window.location.href = "/login");
+  }
+
   return (
     (document.title = "Faça Login | Petzzy"),
     (
@@ -19,7 +25,7 @@ export default function Home() {
               Quem somos?
             </a>
             <a
-              href="#"
+              href="/quero-ser-cliente"
               className="text-lg/8 font-semibold text-petzzy-blue hover:text-blue-800 hover:border-b-2 hover:border-petzzy-blue transition-all"
             >
               Seja um cliente
@@ -39,8 +45,8 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="pt-[10dvh] pb-5 h-[70dvh] w-[95dvw] flex-shrink-0 flex justify-self-center">
-          <div className=" w-[70%]">
+        <div className="pt-[3dvh] h-[70dvh] w-[95dvw] flex-shrink-0 flex justify-self-center">
+          <div className="w-[70%] flex flex-col gap-10">
             <div className="ml-6 w-full h-[50%] flex flex-col gap-2 font-baloo">
               <h1 className="text-petzzy-blue text-7xl font-bold w-[70%]">
                 Agendamentos veterinários Online
@@ -49,7 +55,7 @@ export default function Home() {
                 Marque consultas com veterinários de confiança perto de você!
               </p>
               <button className="bg-blue-500 w-80 h-12 mt-2 text-white text-xl font-semibold flex items-center justify-center rounded-lg hover:bg-petzzy-blue2 transition-all duration-1">
-                <p>Agendar uma consulta</p>
+                <p onClick={agendar}>Agendar uma consulta</p>
               </button>
             </div>
             <div className="mt-8 w-[90%] h-[50%] flex justify-around aling-center font-baloo text-petzzy-blue">

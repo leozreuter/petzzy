@@ -8,9 +8,15 @@ export default function AppRoutes() {
       <Route path="/user" element={<Pages.User />} />
       <Route path="/login" element={<Pages.Login />} />
       <Route path="/home" element={<Pages.Dashboard />} />
-
       <Route path="/cadastro" element={<Pages.Cadastro />} />
-      <Route path="*" element={<h2>Página não encontrada</h2>} />
+      <Route path="/cadastro-clinica" element={<Pages.CadastroClinica />} />
+      <Route path="/quero-ser-cliente" element={<Pages.QueroSerCliente />} />
+      <Route
+        path="/cadastro-veterinario"
+        element={<Pages.CadastroVeterinario />}
+      />
+
+      <Route path="*" element={<Pages.NotFound />} />
     </Routes>
   );
 }

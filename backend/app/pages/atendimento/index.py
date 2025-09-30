@@ -9,7 +9,7 @@ bp = Blueprint('atendimento', __name__, url_prefix="/api/v1/atendimento")
 def criarAtendimentoPage(current_user):
     try:
         data = request.get_json()
-        atendimento = Atendimento.criarAtendimento(data)
+        atendimento = Atendimento.criarAtendimento(current_user,data)
         return jsonify(atendimento.retornaDicionario()), 201
     except ValidationError as err:
         return jsonify(err.to_dict()), err.to_dict().get("status_code", 400)
@@ -20,7 +20,7 @@ def criarAtendimentoPage(current_user):
 @token_required
 def listarAtendimentosPage(current_user):
     try:
-        atendimentos = Atendimento.listaAtendimentos()
+        atendimentos = Atendimento.listaAtendimentosPorIdUsuario(current_user.id)
         return jsonify(atendimentos), 200
     except Exception as err:
         return jsonify({"error": "Ocorreu um erro inesperado", "details": str(err)}), 500
