@@ -14,7 +14,7 @@ class Perfil(db.Model):
     __tablename__ = "perfis"
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
-    desc = db.Column(db.String, nullable=False)
+    desc = db.Column(db.String, nullable=False, unique=True)
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
     

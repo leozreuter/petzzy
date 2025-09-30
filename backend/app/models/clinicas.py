@@ -52,14 +52,14 @@ class Clinica(db.Model):
         cls.verificaCnpjUnico(cnpj)
         
         nova_clinica = cls(
-            nome_fantasia=nome_fantasia.strip(),
+            nome_fantasia=str(nome_fantasia.strip()).lower(),
             cnpj=cnpj,
             telefone_contato=props.get("telefone_contato"),
-            logradouro=props.get("logradouro"),
+            logradouro=str(props.get("logradouro")).lower(),
             numero=props.get("numero"),
-            bairro=props.get("bairro"),
+            bairro=str(props.get("bairro")).lower(),
             estado=props.get("estado"),
-            cidade=props.get("cidade"),
+            cidade=str(props.get("cidade")).lower(),
             cep=props.get("cep")
         )
         db.session.add(nova_clinica)
@@ -97,4 +97,10 @@ class Clinica(db.Model):
     @staticmethod
     def listaClinicas():
         clinicas = Clinica.query.all()
+        return [c.retornaDicionario() for c in clinicas]
+
+    @staticmethod
+    def listaVeterinarios(clinicaId):
+        clinicas = Clinica.query.join(Clinica.pet_fk)\
+        .filter(Pet.id_tutor == userID).all()
         return [c.retornaDicionario() for c in clinicas]

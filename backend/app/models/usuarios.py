@@ -109,7 +109,8 @@ class Usuario(db.Model):
             salt=salt.decode('utf-8'),
             telefone=telefone,
             id_clinica=id_clinica,
-            crmv=crmv
+            crmv=crmv,
+            
         )
         db.session.add(usuario)
         db.session.commit()
@@ -152,5 +153,13 @@ class Usuario(db.Model):
         for user in usuarios:
             lista_usuarios.append(user.retornaDicionario())
         return lista_usuarios
+
+    @staticmethod
+    def listaUsuariosPorPerfil(perfil):
+        usuarios = Usuario.query.join(Usuario.perfil_fk)\
+        .filter(Perfil.desc == perfil).all()
+        return [u.retornaDicionario() for u in usuarios]
+
+
     
     

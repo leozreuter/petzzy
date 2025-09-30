@@ -131,3 +131,8 @@ class Pet(db.Model):
     def listaPets(user):
         pets = Pet.query.filter_by(id_tutor=user.id).all()
         return [pet.retornaDicionario() for pet in pets]
+
+    @staticmethod
+    def validaTutor(userId, petId):
+        pet = Pet.query.filter_by(id_tutor=userId,id=petId).all
+        print(pet)

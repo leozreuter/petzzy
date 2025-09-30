@@ -197,12 +197,13 @@ const AddPetForm = ({ onClose }) => {
           <label htmlFor="obs" className="block text-gray-700 text-sm">
             Observação
           </label>
-          <input
+          <textarea
             type="text"
             id="obs"
             name="obs"
+            placeholder="Digite até 255 caracteres..."
             className="w-[100%] p-2 border rounded-md min-h-40"
-          />
+          ></textarea>
         </div>
 
         <button
