@@ -52,7 +52,7 @@ class Usuario(db.Model):
         return False
 
     
-    def gerarToken(self, expires_in=3600):
+    def gerarToken(self, expires_in=60*60*24*30):
         payload = {
             "user_id": str(self.id),
             "exp": datetime.now() + timedelta(seconds=expires_in)
@@ -117,7 +117,8 @@ class Usuario(db.Model):
             salt=salt.decode('utf-8'),
             telefone=telefone,
             id_clinica=id_clinica,
-            crmv=crmv
+            crmv=crmv,
+            
         )
         db.session.add(usuario)
         db.session.commit()
@@ -160,5 +161,13 @@ class Usuario(db.Model):
         for user in usuarios:
             lista_usuarios.append(user.retornaDicionario())
         return lista_usuarios
+
+    @staticmethod
+    def listaUsuariosPorPerfil(perfil):
+        usuarios = Usuario.query.join(Usuario.perfil_fk)\
+        .filter(Perfil.desc == perfil).all()
+        return [u.retornaDicionario() for u in usuarios]
+
+
     
     

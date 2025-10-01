@@ -20,7 +20,11 @@ def criarRacaPage(current_user):
 @token_required
 def listarRacasPage(current_user):
     try:
-        racas = Raca.listaRacas()
+        especie_id = request.args.get('especie') 
+        if especie_id:
+            racas = Raca.listaRacasPorEspecie(especie_id)
+        else:
+            racas = Raca.listaRacas()
         return jsonify(racas), 200
     except Exception as err:
         return jsonify({"error": "Ocorreu um erro inesperado", "details": str(err)}), 500

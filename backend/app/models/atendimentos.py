@@ -64,9 +64,9 @@ class Atendimento(db.Model):
         return atendimento
 
     @classmethod
-    def criarAtendimento(cls, props):
-        from .. import mail  # <-- ALTERAÇÃO 2: A importação do 'mail' foi movida para cá
-
+    def criarAtendimento(cls, user, props):
+        from .. import mail  
+        
         id_pet = props.get("id_pet")
         id_veterinario = props.get("id_veterinario")
         id_clinica = props.get("id_clinica")
@@ -77,6 +77,8 @@ class Atendimento(db.Model):
         pet = Pet.procuraPeloID(id_pet)
         veterinario = Usuario.procuraPeloID(id_veterinario)
         clinica = Clinica.procuraPeloID(id_clinica)
+       
+        Pet.validaTutor(user.id,id_pet)
 
         novo_atendimento = cls(
             id_pet=id_pet,
@@ -89,7 +91,6 @@ class Atendimento(db.Model):
         db.session.add(novo_atendimento)
         db.session.commit() # Salva no banco primeiro
 
-        # --- LÓGICA DE ENVIO DE E-MAIL APÓS SALVAR ---
         try:
             link_agenda = gerar_link_google_calendar(novo_atendimento, pet, clinica, veterinario)
             
@@ -143,6 +144,7 @@ class Atendimento(db.Model):
             "id_pet": str(self.id_pet),
             "id_veterinario": str(self.id_veterinario),
             "id_clinica": str(self.id_clinica),
+            "clinica": str(self.clinica_fk.nome_fantasia),
             "dthr_atendimento": self.dthr_atendimento.isoformat(),
             "motivo": self.motivo,
             "status": self.status
@@ -151,4 +153,10 @@ class Atendimento(db.Model):
     @staticmethod
     def listaAtendimentos():
         atendimentos = Atendimento.query.all()
+        return [a.retornaDicionario() for a in atendimentos]
+        
+    @staticmethod
+    def listaAtendimentosPorIdUsuario(userID):
+        atendimentos = Atendimento.query.join(Atendimento.pet_fk)\
+        .filter(Pet.id_tutor == userID).all()
         return [a.retornaDicionario() for a in atendimentos]

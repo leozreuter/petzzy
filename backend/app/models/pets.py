@@ -29,7 +29,7 @@ class Pet(db.Model):
     status = db.Column(db.String(20), nullable=False, default="ativo")
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    
+
     tutor_fk = relationship("Usuario", back_populates="pets")
     raca_fk = relationship("Raca", back_populates="pets")
     
@@ -47,10 +47,10 @@ class Pet(db.Model):
         return pet
 
     @classmethod
-    def criarPet(cls, props):
+    def criarPet(cls, currentUser, props):
         nome = props.get("nome")
-        id_tutor = props.get("id_tutor")
         id_raca = props.get("id_raca")
+        id_tutor = currentUser.id
         
         if not all([nome, id_tutor, id_raca]):
             raise ValidationError(
@@ -121,12 +121,18 @@ class Pet(db.Model):
             "obs": self.obs,
             "id_raca": str(self.id_raca),
             "raca": self.raca_fk.nome if self.raca_fk else None, 
+            "especie": self.raca_fk.especie_fk.nome if self.raca_fk else None,
             "tutor": self.tutor_fk.nome if self.tutor_fk else None, 
             "dthr_alt": self.dthr_alt.isoformat(),
             "dthr_ins": self.dthr_ins.isoformat()
         }
 
     @staticmethod
-    def listaPets():
-        pets = Pet.query.all()
+    def listaPets(user):
+        pets = Pet.query.filter_by(id_tutor=user.id).all()
         return [pet.retornaDicionario() for pet in pets]
+
+    @staticmethod
+    def validaTutor(userId, petId):
+        pet = Pet.query.filter_by(id_tutor=userId,id=petId).all
+        print(pet)

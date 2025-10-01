@@ -11,11 +11,14 @@ async def criarUsuarioPage():
     """
     try:
         data = request.get_json()
-        data = {**data, "id_perfil":str(Perfil.procuraPeloNome("Usuário").id), "telefone": None, "crmv": None, "id_clinica": None}
-        print(data)
+        if data.get("crmv") is not None:
+            data = {**data, "id_perfil":str(Perfil.procuraPeloNome("Veterinario").id)}
+        else:
+            data = {**data, "id_perfil":str(Perfil.procuraPeloNome("Usuario").id), "telefone": None, "crmv": None, "id_clinica": None}
         user = Usuario.criarUsuario(data)
         return jsonify(user.retornaDicionario()), 201
     except Exception as err:
+        print(err)
         return jsonify(err.to_dict()),err.to_dict().get("status_code")
 
 @bp.route('/login', methods=['POST'], strict_slashes=False) 
@@ -36,6 +39,7 @@ def autenticarUsuario():
 
     token, expiracao = usuarioSelecionado.gerarToken()
     return jsonify({
+        "nome": usuarioSelecionado.nome.title(),
         "token": token,
         "expiracao": expiracao
     }), 200
@@ -47,7 +51,11 @@ def listarUsuariosPage(current_user):
     Retorna uma lista de usuários 
     """
     try:
-        usuarios = Usuario.listaUsuarios()
+        perfil = request.args.get('perfil')
+        if perfil:
+            usuarios = Usuario.listaUsuariosPorPerfil(perfil)
+        else:
+            usuarios = Usuario.listaUsuarios()
         return jsonify(usuarios), 200
     except Exception as err:
         return jsonify(err.to_dict()),err.to_dict().get("status_code")
