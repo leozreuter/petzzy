@@ -61,9 +61,6 @@ def create_app():
 
     from .pages.pet.index import bp as pet_bp
     app.register_blueprint(pet_bp, url_prefix=f'/api/{API_VERSION}/pet')
-    app.register_blueprint(clinica_bp, url_prefix=f'/api/{API_VERSION}/clinica')
-    app.register_blueprint(atendimento_bp, url_prefix=f'/api/{API_VERSION}/atendimento')
-
 
     from .pages.prontuario.index import bp as prontuario_bp
     app.register_blueprint(prontuario_bp, url_prefix=f'/api/{API_VERSION}/protuario')
