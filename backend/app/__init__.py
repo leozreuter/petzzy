@@ -3,21 +3,36 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
+from flask_mail import Mail
+
 
 import app.infra.erros as Errors
 
 db = SQLAlchemy()
+mail = Mail()
 migrate = Migrate(directory="app/infra/migrations")
 
 API_VERSION = os.environ.get("API_VERSION") or "v1"
 
 def create_app():
     app = Flask(__name__)
+    
+    app.config['MAIL_SERVER'] = 'sandbox.smtp.mailtrap.io'
+    app.config['MAIL_PORT'] = 2525
+    app.config['MAIL_USERNAME'] = '4eb77c18802746'
+    app.config['MAIL_PASSWORD'] = '2fe2057256eb0a' 
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USE_SSL'] = False
+    app.config['MAIL_DEFAULT_SENDER'] = 'noreply@petzzy.com'
+    
+    CORS(app, resources={r"*": {"origins": "*"}})
+
     app.config.from_object("config.Config")
 
     CORS(app)
    
     db.init_app(app)
+    mail.init_app(app)
     migrate.init_app(app, db)
 
     @app.errorhandler(Exception)
@@ -46,6 +61,9 @@ def create_app():
 
     from .pages.pet.index import bp as pet_bp
     app.register_blueprint(pet_bp, url_prefix=f'/api/{API_VERSION}/pet')
+    app.register_blueprint(clinica_bp, url_prefix=f'/api/{API_VERSION}/clinica')
+    app.register_blueprint(atendimento_bp, url_prefix=f'/api/{API_VERSION}/atendimento')
+
 
     from .pages.prontuario.index import bp as prontuario_bp
     app.register_blueprint(prontuario_bp, url_prefix=f'/api/{API_VERSION}/protuario')

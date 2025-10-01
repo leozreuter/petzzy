@@ -77,6 +77,14 @@ class Usuario(db.Model):
             )
         return usuario
     
+    @classmethod
+    def procuraPeloID(cls, id):
+        usuario = cls.query.filter_by(id=id).first()
+        if not usuario:
+            
+            raise ValidationError(message=f"Usuário com ID '{id}' não encontrado.")
+        return usuario
+
     #CRUD
   
     def criarUsuario(props):
