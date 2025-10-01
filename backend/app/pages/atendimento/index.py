@@ -1,3 +1,5 @@
+# app/api/v1/atendimento.py
+
 from flask import Blueprint, request, jsonify
 from app.models.atendimentos import Atendimento, ValidationError
 from app.auth.jwt_middleware import token_required
@@ -25,7 +27,6 @@ def listarAtendimentosPage(current_user):
     except Exception as err:
         return jsonify({"error": "Ocorreu um erro inesperado", "details": str(err)}), 500
 
-# Rotas específicas de status para Atendimento
 @bp.route('/realizar', methods=['POST'], strict_slashes=False)
 @token_required
 def realizarAtendimentoPage(current_user):

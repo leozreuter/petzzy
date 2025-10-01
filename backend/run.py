@@ -3,6 +3,9 @@ from flask_migrate import upgrade
 from app.infra.scripts.wait_for_postgres import check_postgres
 from app.infra.scripts.init_default_users import create_default_users
 import os
+from dotenv import load_dotenv
+
+load_dotenv('.env.development')
 
 app = create_app()
 
