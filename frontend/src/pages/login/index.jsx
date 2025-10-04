@@ -40,7 +40,7 @@ export default function LoginPage() {
 
   async function ApiLogin({ email, password }) {
     const data = { email: email, senha: password };
-    const response = await fetch("http://localhost:5001/api/v1/user/login", {
+    const response = await fetch(process.env.REACT_APP_BACKEND_SERVER+"/api/v1/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
