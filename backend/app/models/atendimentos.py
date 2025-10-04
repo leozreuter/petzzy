@@ -40,6 +40,7 @@ def gerar_link_google_calendar(atendimento, pet, clinica, veterinario):
 
 class Atendimento(db.Model):
     __tablename__ = "atendimentos"
+    __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     dthr_atendimento = db.Column(db.DateTime, nullable=False)

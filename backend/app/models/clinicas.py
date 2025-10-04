@@ -10,6 +10,7 @@ STATUS_INATIVO = "inativo"
 
 class Clinica(db.Model):
     __tablename__ = "clinicas"
+    __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     nome_fantasia = db.Column(db.String(255), nullable=False)
