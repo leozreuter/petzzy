@@ -33,7 +33,8 @@ def upgrade():
     sa.Column('dthr_alt', sa.DateTime(), nullable=False),
     sa.Column('dthr_ins', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('id')
+    sa.UniqueConstraint('id'),
+    schema='public'
     )
     op.create_table('especies',
     sa.Column('id', sa.UUID(), nullable=False),
@@ -42,7 +43,8 @@ def upgrade():
     sa.Column('dthr_alt', sa.DateTime(), nullable=False),
     sa.Column('dthr_ins', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('id')
+    sa.UniqueConstraint('id'),
+    schema='public'
     )
     op.create_table('perfis',
     sa.Column('id', sa.UUID(), nullable=False),
@@ -50,7 +52,8 @@ def upgrade():
     sa.Column('dthr_alt', sa.DateTime(), nullable=False),
     sa.Column('dthr_ins', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('id')
+    sa.UniqueConstraint('id'),
+    schema='public'
     )
     op.create_table('racas',
     sa.Column('id', sa.UUID(), nullable=False),
@@ -61,7 +64,8 @@ def upgrade():
     sa.Column('dthr_ins', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['id_especie'], ['especies.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('id')
+    sa.UniqueConstraint('id'),
+    schema='public'
     )
     op.create_table('usuarios',
     sa.Column('id', sa.UUID(), nullable=False),
@@ -80,7 +84,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['id_perfil'], ['perfis.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
-    sa.UniqueConstraint('id')
+    sa.UniqueConstraint('id'),
+    schema='public'
     )
     op.create_table('agendas',
     sa.Column('id', sa.UUID(), nullable=False),
@@ -95,7 +100,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['id_clinica'], ['clinicas.id'], ),
     sa.ForeignKeyConstraint(['id_veterinario'], ['usuarios.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('id')
+    sa.UniqueConstraint('id'),
+    schema='public'
     )
     op.create_table('pets',
     sa.Column('id', sa.UUID(), nullable=False),
@@ -112,7 +118,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['id_raca'], ['racas.id'], ),
     sa.ForeignKeyConstraint(['id_tutor'], ['usuarios.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('id')
+    sa.UniqueConstraint('id'),
+    schema='public'
     )
     op.create_table('atendimentos',
     sa.Column('id', sa.UUID(), nullable=False),
@@ -128,7 +135,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['id_pet'], ['pets.id'], ),
     sa.ForeignKeyConstraint(['id_veterinario'], ['usuarios.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('id')
+    sa.UniqueConstraint('id'),
+    schema='public'
     )
     op.create_table('vacinas',
     sa.Column('id', sa.UUID(), nullable=False),
@@ -143,7 +151,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['id_pet'], ['pets.id'], ),
     sa.ForeignKeyConstraint(['id_veterinario'], ['usuarios.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('id')
+    sa.UniqueConstraint('id'),
+    schema='public'
     )
     op.create_table('prontuarios',
     sa.Column('id', sa.UUID(), nullable=False),
@@ -159,7 +168,8 @@ def upgrade():
     sa.Column('dthr_ins', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['id_atendimento'], ['atendimentos.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('id')
+    sa.UniqueConstraint('id'),
+    schema='public'
     )
     # ### end Alembic commands ###
 
