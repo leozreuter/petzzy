@@ -13,7 +13,8 @@ app = create_app()
 if __name__ == "__main__":
     if os.environ.get("DEBUG_MODE")!="1":
         os.environ["DEBUG_MODE"] = "1"
-        check_postgres()
+        if os.environ.get("FLASK_ENV") == "development":
+            check_postgres()
         with app.app_context():
             upgrade()
             create_default_users()
