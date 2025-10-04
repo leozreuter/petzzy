@@ -12,6 +12,7 @@ STATUS_INATIVO = "inativo"
 
 class Prontuario(db.Model):
     __tablename__ = "prontuarios"
+    __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     anamnese = db.Column(db.String(255), nullable=False)

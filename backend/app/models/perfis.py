@@ -12,6 +12,7 @@ from app.infra.erros import NotFoundError
 
 class Perfil(db.Model):
     __tablename__ = "perfis"
+    __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     desc = db.Column(db.String, nullable=False, unique=True)

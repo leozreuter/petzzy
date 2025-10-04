@@ -17,6 +17,7 @@ STATUS_INATIVO = "inativo"
 
 class Pet(db.Model):
     __tablename__ = "pets"
+    __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     nome = db.Column(db.String(255), nullable=False)

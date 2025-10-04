@@ -21,6 +21,8 @@ STATUS_INATIVO = 'inativo'
 # https://docs.sqlalchemy.org/en/20/core/types.html
 class Usuario(db.Model):
     __tablename__ = "usuarios"
+    __table_args__ = {'schema': 'public'}
+    
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     email = db.Column(db.String(254), unique=True, nullable=False,)
     nome = db.Column(db.String, nullable=False)

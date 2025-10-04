@@ -10,6 +10,7 @@ from .usuarios import Usuario
 
 class Vacina(db.Model):
     __tablename__ = "vacinas"
+    __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     nome_vacina = db.Column(db.String(100), nullable=False)

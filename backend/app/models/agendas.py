@@ -13,6 +13,7 @@ STATUS_INATIVO = "inativo"
 
 class Agenda(db.Model):
     __tablename__ = "agendas"
+    __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     dia_semana = db.Column(ARRAY(Integer)) # Ex: [1, 2, 3] para Seg, Ter, Qua
