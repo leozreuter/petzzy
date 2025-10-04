@@ -15,9 +15,10 @@ if __name__ == "__main__":
         os.environ["DEBUG_MODE"] = "1"
         if os.environ.get("FLASK_ENV") == "development":
             check_postgres()
-        with app.app_context():
-            upgrade()
-            create_default_users()
+            
+    with app.app_context():
+        upgrade()
+        create_default_users()
         
     # Run the Flask app
     app.run(debug=True, host='0.0.0.0', port='5001')
