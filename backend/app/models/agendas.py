@@ -22,8 +22,8 @@ class Agenda(db.Model):
     status = db.Column(db.String(20), nullable=False, default=STATUS_ATIVO)
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    id_veterinario = db.Column(UUID(as_uuid=True), ForeignKey("usuarios.id"), nullable=False)
-    id_clinica = db.Column(UUID(as_uuid=True), ForeignKey("clinicas.id"), nullable=False)
+    id_veterinario = db.Column(UUID(as_uuid=True), ForeignKey("public.usuarios.id"), nullable=False)
+    id_clinica = db.Column(UUID(as_uuid=True), ForeignKey("public.clinicas.id"), nullable=False)
     
     usuario_fk = relationship("Usuario", back_populates="agendas")
     clinica_fk = relationship("Clinica", back_populates="agendas")

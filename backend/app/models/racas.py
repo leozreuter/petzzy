@@ -16,7 +16,7 @@ class Raca(db.Model):
     __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
-    id_especie = db.Column(UUID(as_uuid=True), ForeignKey("especies.id"), nullable=False)
+    id_especie = db.Column(UUID(as_uuid=True), ForeignKey("public.especies.id"), nullable=False)
     nome = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(20), nullable=False, default="ativo")
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now)

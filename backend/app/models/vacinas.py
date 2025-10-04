@@ -17,8 +17,8 @@ class Vacina(db.Model):
     data_aplicacao = db.Column(Date, nullable=False)
     data_proxima_dose = db.Column(Date)
     lote = db.Column(db.String(50))
-    id_pet = db.Column(UUID(as_uuid=True), ForeignKey("pets.id"), nullable=False)
-    id_veterinario = db.Column(UUID(as_uuid=True), ForeignKey("usuarios.id"), nullable=False)
+    id_pet = db.Column(UUID(as_uuid=True), ForeignKey("public.pets.id"), nullable=False)
+    id_veterinario = db.Column(UUID(as_uuid=True), ForeignKey("public.usuarios.id"), nullable=False)
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
 

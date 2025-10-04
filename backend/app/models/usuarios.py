@@ -31,8 +31,8 @@ class Usuario(db.Model):
     telefone = db.Column(db.String(13))
     crmv = db.Column(db.String(20))
     status = db.Column(db.String(20), nullable=False, default="ativo")
-    id_perfil = db.Column(UUID(as_uuid=True), ForeignKey("perfis.id"), nullable=False)
-    id_clinica = db.Column(UUID(as_uuid=True), ForeignKey("clinicas.id"))
+    id_perfil = db.Column(UUID(as_uuid=True), ForeignKey("public.perfis.id"), nullable=False)
+    id_clinica = db.Column(UUID(as_uuid=True), ForeignKey("public.clinicas.id"))
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
