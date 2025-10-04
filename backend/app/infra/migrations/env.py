@@ -98,7 +98,6 @@ def run_migrations_online():
     connectable = get_engine()
 
     with connectable.connect() as connection:
-        connection.execute(text("SET search_path TO public"))
         context.configure(
             connection=connection,
             target_metadata=get_metadata(),
