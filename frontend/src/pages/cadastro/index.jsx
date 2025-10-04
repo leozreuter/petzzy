@@ -52,7 +52,7 @@ export default function Cadastro() {
 
   async function ApiCadastro({ nome, email, senha }) {
     const data = { nome: nome, email: email, senha: senha };
-    const response = await fetch("http://localhost:5001/api/v1/user", {
+    const response = await fetch(process.env.REACT_APP_BACKEND_SERVER+"/api/v1/user", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),

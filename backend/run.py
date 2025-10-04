@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv('.env.development')
+load_dotenv('.env.production')
 
 app = create_app()
 
