@@ -13,6 +13,7 @@ STATUS_INATIVO = "inativo"
 
 class Agenda(db.Model):
     __tablename__ = "agendas"
+    __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     dia_semana = db.Column(ARRAY(Integer)) # Ex: [1, 2, 3] para Seg, Ter, Qua
@@ -21,8 +22,8 @@ class Agenda(db.Model):
     status = db.Column(db.String(20), nullable=False, default=STATUS_ATIVO)
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    id_veterinario = db.Column(UUID(as_uuid=True), ForeignKey("usuarios.id"), nullable=False)
-    id_clinica = db.Column(UUID(as_uuid=True), ForeignKey("clinicas.id"), nullable=False)
+    id_veterinario = db.Column(UUID(as_uuid=True), ForeignKey("public.usuarios.id"), nullable=False)
+    id_clinica = db.Column(UUID(as_uuid=True), ForeignKey("public.clinicas.id"), nullable=False)
     
     usuario_fk = relationship("Usuario", back_populates="agendas")
     clinica_fk = relationship("Clinica", back_populates="agendas")

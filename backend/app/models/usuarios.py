@@ -21,6 +21,8 @@ STATUS_INATIVO = 'inativo'
 # https://docs.sqlalchemy.org/en/20/core/types.html
 class Usuario(db.Model):
     __tablename__ = "usuarios"
+    __table_args__ = {'schema': 'public'}
+    
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     email = db.Column(db.String(254), unique=True, nullable=False,)
     nome = db.Column(db.String, nullable=False)
@@ -29,8 +31,8 @@ class Usuario(db.Model):
     telefone = db.Column(db.String(13))
     crmv = db.Column(db.String(20))
     status = db.Column(db.String(20), nullable=False, default="ativo")
-    id_perfil = db.Column(UUID(as_uuid=True), ForeignKey("perfis.id"), nullable=False)
-    id_clinica = db.Column(UUID(as_uuid=True), ForeignKey("clinicas.id"))
+    id_perfil = db.Column(UUID(as_uuid=True), ForeignKey("public.perfis.id"), nullable=False)
+    id_clinica = db.Column(UUID(as_uuid=True), ForeignKey("public.clinicas.id"))
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
 

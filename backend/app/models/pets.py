@@ -17,6 +17,7 @@ STATUS_INATIVO = "inativo"
 
 class Pet(db.Model):
     __tablename__ = "pets"
+    __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     nome = db.Column(db.String(255), nullable=False)
@@ -24,8 +25,8 @@ class Pet(db.Model):
     sexo = db.Column(db.String(1))
     cor = db.Column(db.String(50))
     obs = db.Column(db.String(255))
-    id_raca = db.Column(UUID(as_uuid=True), ForeignKey("racas.id"), nullable=False)
-    id_tutor = db.Column(UUID(as_uuid=True), ForeignKey("usuarios.id"), nullable=False)
+    id_raca = db.Column(UUID(as_uuid=True), ForeignKey("public.racas.id"), nullable=False)
+    id_tutor = db.Column(UUID(as_uuid=True), ForeignKey("public.usuarios.id"), nullable=False)
     status = db.Column(db.String(20), nullable=False, default="ativo")
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)

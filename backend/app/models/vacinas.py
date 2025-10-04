@@ -10,14 +10,15 @@ from .usuarios import Usuario
 
 class Vacina(db.Model):
     __tablename__ = "vacinas"
+    __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     nome_vacina = db.Column(db.String(100), nullable=False)
     data_aplicacao = db.Column(Date, nullable=False)
     data_proxima_dose = db.Column(Date)
     lote = db.Column(db.String(50))
-    id_pet = db.Column(UUID(as_uuid=True), ForeignKey("pets.id"), nullable=False)
-    id_veterinario = db.Column(UUID(as_uuid=True), ForeignKey("usuarios.id"), nullable=False)
+    id_pet = db.Column(UUID(as_uuid=True), ForeignKey("public.pets.id"), nullable=False)
+    id_veterinario = db.Column(UUID(as_uuid=True), ForeignKey("public.usuarios.id"), nullable=False)
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
 

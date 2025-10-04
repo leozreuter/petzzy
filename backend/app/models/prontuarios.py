@@ -12,6 +12,7 @@ STATUS_INATIVO = "inativo"
 
 class Prontuario(db.Model):
     __tablename__ = "prontuarios"
+    __table_args__ = {'schema': 'public'}
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     anamnese = db.Column(db.String(255), nullable=False)
@@ -20,7 +21,7 @@ class Prontuario(db.Model):
     diagnostico_final = db.Column(db.String(255))
     tratamento_prescrito = db.Column(db.String(255))
     obs_retorno = db.Column(db.String(255))
-    id_atendimento = db.Column(UUID(as_uuid=True), ForeignKey("atendimentos.id"), unique=True, nullable=False)
+    id_atendimento = db.Column(UUID(as_uuid=True), ForeignKey("public.atendimentos.id"), unique=True, nullable=False)
     status = db.Column(db.String(20), nullable=False, default=STATUS_ATIVO)
     dthr_alt = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
     dthr_ins = db.Column(db.DateTime, nullable=False, default=datetime.now)
